@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>TOCFL Quiz 繁體 · Level I–III</title>
+<style>
+:root{--bg:#faf8f3;--fg:#1e1d1a;--mu:#75726a;--cd:#fff;--bd:#e3dfd3;--ac:#b4432b;--ok:#23783f;--okb:#e5f3e9;--no:#b3261e;--nob:#fbe8e5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161512;--fg:#efece4;--mu:#a09c90;--cd:#211f1b;--bd:#37342d;--ac:#e2795f;--ok:#6fcf8e;--okb:#16291d;--no:#ff8a80;--nob:#301a18}}
+:root[data-theme="dark"]{--bg:#161512;--fg:#efece4;--mu:#a09c90;--cd:#211f1b;--bd:#37342d;--ac:#e2795f;--ok:#6fcf8e;--okb:#16291d;--no:#ff8a80;--nob:#301a18}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+.bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--mu);font-size:13px;margin:8px 0 14px}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.tag{font-size:12px;color:var(--ac);margin-bottom:6px}.mu{color:var(--mu);font-size:14px}.ac{color:var(--ac)}
+.q{font-size:21px;line-height:1.5;margin:0 0 14px;white-space:pre-line}
+.o,.lv{display:block;width:100%;text-align:left;font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin:8px 0;cursor:pointer}
+.lv{padding:14px 16px}.o:hover:not(:disabled),.lv:hover{border-color:var(--ac)}.o:disabled{color:var(--fg);cursor:default}
+.o.ok{background:var(--okb);border-color:var(--ok)}.o.no{background:var(--nob);border-color:var(--no)}
+textarea{width:100%;min-height:90px;font:inherit;font-size:18px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--fg)}
+.b{font:inherit;background:var(--ac);color:var(--bg);border:0;border-radius:10px;padding:11px 20px;margin:12px 8px 0 0;cursor:pointer}
+.b.g{background:none;color:var(--fg);border:1px solid var(--bd)}
+.fb{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:15px}.fb.ok{background:var(--okb)}.fb.no{background:var(--nob)}
+.dt{margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd)}.zh{font-size:19px}.dt i{color:var(--mu)}
+details{margin:8px 0;border-bottom:1px solid var(--bd);padding-bottom:6px}summary{cursor:pointer}
+h1,h2{margin:0 0 8px}
+</style></head><body><main lang="zh-Hant"><div id="app"></div></main>
+<script>
+// MC: [lv, soal, jawaban, [pengecoh], 'pinyin · arti', contoh, pinyin contoh, arti contoh]
+// Essay: [lv, soal, contoh jawaban, [kata kunci], pinyin]   (lv 1 = A1, lv 2 = A2–B1)
+const D=[
+[1,'現在＿＿點鐘？','幾',['哪','誰','怎麼'],'jǐ · berapa (angka kecil)','你家有幾個人？','Nǐ jiā yǒu jǐ gè rén?','Di rumahmu ada berapa orang?'],
+[1,'今天是九月十九＿＿。','日',['月','分','課'],'rì · tanggal / hari','你的生日是幾月幾日？','Nǐ de shēngrì shì jǐ yuè jǐ rì?','Ulang tahunmu bulan berapa tanggal berapa?'],
+[1,'昨天是星期二，今天是星期＿＿。','三',['一','五','日'],'sān · tiga → 星期三 = Rabu','我星期三有中文課。','Wǒ xīngqí sān yǒu Zhōngwén kè.','Hari Rabu aku ada kelas Mandarin.'],
+[1,'現在是十二點，也就是＿＿。','中午',['昨天','上課','星期'],'zhōngwǔ · siang','中午我常常吃麵。','Zhōngwǔ wǒ chángcháng chī miàn.','Siang hari aku sering makan mi.'],
+[1,'請問，圖書館在＿＿？','哪裡',['什麼','幾點','誰'],'nǎlǐ · di mana','你的朋友住在哪裡？','Nǐ de péngyǒu zhù zài nǎlǐ?','Temanmu tinggal di mana?'],
+[1,'我們十二點＿＿，然後去餐廳吃飯。','下課',['上課','運動','可以'],'xiàkè · selesai kelas (上課 = masuk kelas)','我們四點下課。','Wǒmen sì diǎn xiàkè.','Kami selesai kelas jam empat.'],
+[1,'「老闆」是什麼意思？','bos / pemilik usaha',['dokter','teman sekelas','anak kecil'],'lǎobǎn · bos / pemilik usaha','這家店的老闆很好。','Zhè jiā diàn de lǎobǎn hěn hǎo.','Pemilik toko ini baik sekali.'],
+[1,'醫生和護理師都在＿＿工作。','醫院',['學校','餐廳','圖書館'],'yīyuàn · rumah sakit','他的媽媽在醫院工作。','Tā de māma zài yīyuàn gōngzuò.','Ibunya bekerja di rumah sakit.'],
+[1,'「滷肉飯」是什麼？','nasi daging babi cincang kecap',['sup daging sapi','nasi goreng ayam','semangka dingin'],'lǔròufàn · nasi daging babi cincang kecap, makanan khas Taiwan','我想吃一碗滷肉飯。','Wǒ xiǎng chī yì wǎn lǔròufàn.','Aku mau makan semangkuk nasi lurou.'],
+[1,'我想＿＿一杯茶。','喝',['吃','做','愛'],'hē · minum (吃 = makan)','你要喝水還是喝茶？','Nǐ yào hē shuǐ háishi hē chá?','Kamu mau minum air atau teh?'],
+[1,'你不小心踩到別人的腳，你會說：','不好意思',['請問','沒有','可以'],'bù hǎoyìsi · maaf / permisi','不好意思，我來晚了。','Bù hǎoyìsi, wǒ lái wǎn le.','Maaf, aku datang terlambat.'],
+[1,'那個孩子很＿＿，大家都喜歡他。','可愛',['運動','下課','老闆'],'kě’ài · imut, menggemaskan','你的小狗真可愛！','Nǐ de xiǎo gǒu zhēn kě’ài!','Anjing kecilmu imut sekali!'],
+[1,'「怎麼樣」是什麼意思？','bagaimana',['kapan','di mana','siapa'],'zěnmeyàng · bagaimana','今天的天氣怎麼樣？','Jīntiān de tiānqì zěnmeyàng?','Cuaca hari ini bagaimana?'],
+[1,'跟我在同一個班上課的人是我的＿＿。','同學',['老闆','醫生','家人'],'tóngxué · teman sekelas','她是我的同學。','Tā shì wǒ de tóngxué.','Dia teman sekelasku.'],
+[1,'我每天下午在學校＿＿，所以身體很好。','運動',['下課','喝茶','可愛'],'yùndòng · olahraga','我喜歡在早上運動。','Wǒ xǐhuān zài zǎoshang yùndòng.','Aku suka olahraga di pagi hari.'],
+[1,'爸爸、媽媽和哥哥是我的＿＿。','家人',['同學','老闆','學生'],'jiārén · anggota keluarga','我的家人都很好。','Wǒ de jiārén dōu hěn hǎo.','Keluargaku semuanya baik.'],
+[1,'夏天很熱，我想吃一塊冰冰的＿＿。','西瓜',['茶','課','名字'],'xīguā · semangka','夏天我常吃西瓜。','Xiàtiān wǒ cháng chī xīguā.','Musim panas aku sering makan semangka.'],
+[1,'用中文寫：Nama saya Meimei, saya murid. Saya suka makan ayam.','我叫美美，我是學生。我喜歡吃雞肉。',['名字|叫','學生','喜歡','雞肉'],'Wǒ jiào Měiměi, wǒ shì xuéshēng. Wǒ xǐhuān chī jīròu.'],
+[1,'用中文寫：Sekarang jam 3:15.','現在三點十五分。',['現在','三點','十五分|一刻'],'Xiànzài sān diǎn shíwǔ fēn.'],
+[1,'用中文寫：Permisi, di mana restoran? Saya mau makan.','請問，餐廳在哪裡？我想吃飯。',['請問','餐廳','哪裡','吃'],'Qǐngwèn, cāntīng zài nǎlǐ? Wǒ xiǎng chīfàn.'],
+[1,'「多少錢？」是什麼意思？','berapa harganya',['jam berapa','di mana','siapa'],'duōshǎo qián · berapa harganya','這杯茶多少錢？','Zhè bēi chá duōshǎo qián?','Berapa harga teh ini?'],
+[1,'朋友幫了你的忙，你說：','謝謝',['再見','對不起','請問'],'xièxie · terima kasih','謝謝你的幫忙。','Xièxie nǐ de bāngmáng.','Terima kasih atas bantuanmu.'],
+[1,'他是＿＿人，住在台北。','台灣',['學校','今天','朋友'],'Táiwān · Taiwan','我想去台灣學中文。','Wǒ xiǎng qù Táiwān xué Zhōngwén.','Aku ingin ke Taiwan belajar Mandarin.'],
+[1,'你叫什麼＿＿？','名字',['學生','朋友','醫生'],'míngzi · nama','他的名字是大明。','Tā de míngzi shì Dàmíng.','Namanya Daming.'],
+[1,'我在學校＿＿中文。','學',['做','買','賣'],'xué · belajar','我學中文一年了。','Wǒ xué Zhōngwén yì nián le.','Aku sudah belajar Mandarin setahun.'],
+[1,'我喜歡＿＿電影。','看',['喝','吃','說'],'kàn · melihat / menonton','你看，那是我的家。','Nǐ kàn, nà shì wǒ de jiā.','Lihat, itu rumahku.'],
+[1,'我沒有＿＿，不能買東西。','錢',['水','茶','朋友'],'qián · uang','你有錢嗎？','Nǐ yǒu qián ma?','Kamu punya uang?'],
+[1,'你會說中文＿＿？','嗎',['的','了','都'],'ma · partikel tanya ya/tidak','你是學生嗎？','Nǐ shì xuéshēng ma?','Apakah kamu murid?'],
+[1,'我很＿＿，想吃飯。','餓',['累','冷','忙'],'è · lapar','你餓不餓？','Nǐ è bú è?','Kamu lapar tidak?'],
+[1,'我＿＿兩個朋友。','有',['是','在','不'],'yǒu · punya / ada','我有一個哥哥。','Wǒ yǒu yí gè gēge.','Aku punya seorang kakak laki-laki.'],
+[2,'買東西以後，店員給你的＿＿可以證明你付過錢。','收據',['優惠券','折扣','影印'],'shōujù · struk / kwitansi','我把收據放在包包裡。','Wǒ bǎ shōujù fàng zài bāobāo lǐ.','Aku menaruh struk di dalam tas.'],
+[2,'老闆，可以幫我把這份資料＿＿一份嗎？','影印',['折扣','訂位','刷卡'],'yǐngyìn · fotokopi','請幫我影印這張表。','Qǐng bāng wǒ yǐngyìn zhè zhāng biǎo.','Tolong fotokopikan formulir ini.'],
+[2,'這張＿＿可以讓你買咖啡便宜五十元。','優惠券',['收據','影印','地址'],'yōuhuìquàn · kupon / voucher','這張優惠券今天可以用。','Zhè zhāng yōuhuìquàn jīntiān kěyǐ yòng.','Kupon ini bisa dipakai hari ini.'],
+[2,'「這件衣服打八折」是什麼意思？','bayar 80% (diskon 20%)',['diskon 80%','bayar 20% saja','beli 8 gratis 1'],'dǎ bā zhé · harga jadi 80% (jebakan: BUKAN diskon 80%)','這本書打九折。','Zhè běn shū dǎ jiǔ zhé.','Buku ini bayar 90% (diskon 10%).'],
+[2,'你想用現金還是＿＿付錢？','刷卡',['影印','訂位','請假'],'shuākǎ · bayar pakai kartu','這裡可以刷卡嗎？','Zhèlǐ kěyǐ shuākǎ ma?','Di sini bisa bayar pakai kartu?'],
+[2,'這雙鞋太小了，我想＿＿一雙大一點的。','換',['借','刷','影印'],'huàn · tukar / ganti','我想換一個大一點的。','Wǒ xiǎng huàn yí ge dà yìdiǎn de.','Aku mau tukar dengan yang lebih besar.'],
+[2,'週末我想去那家餐廳吃飯，所以先打電話＿＿。','訂位',['影印','找錢','下課'],'dìngwèi · reservasi tempat','我們今天晚上要訂位。','Wǒmen jīntiān wǎnshàng yào dìngwèi.','Kami perlu reservasi malam ini.'],
+[2,'我＿＿了，要請假去看醫生。','生病',['運動','上課','可愛'],'shēngbìng · sakit','他生病了，今天不能來。','Tā shēngbìng le, jīntiān bù néng lái.','Dia sakit, hari ini tidak bisa datang.'],
+[2,'我要去＿＿寄包裹給我媽媽。','郵局',['銀行','醫院','學校'],'yóujú · kantor pos','郵局在銀行旁邊。','Yóujú zài yínháng pángbiān.','Kantor pos ada di sebelah bank.'],
+[2,'我們在下一站＿＿，再坐公車去學校。','轉車',['訂位','影印','下課'],'zhuǎnchē · ganti kendaraan','去台中要在台北轉車。','Qù Táizhōng yào zài Táiběi zhuǎnchē.','Ke Taichung harus ganti kereta di Taipei.'],
+[2,'＿＿他很忙，但是他還是來幫我。','雖然',['因為','如果','所以'],'suīrán · meskipun (…但是 = tetapi…)','雖然很貴，但是很好吃。','Suīrán hěn guì, dànshì hěn hǎochī.','Meski mahal, tapi enak sekali.'],
+[2,'＿＿明天下雨，我們就在家看電影。','如果',['因為','雖然','不但'],'rúguǒ · kalau / jika (…就 = maka…)','如果你有空，我們一起吃飯。','Rúguǒ nǐ yǒu kòng, wǒmen yìqǐ chīfàn.','Kalau kamu senggang, kita makan bersama.'],
+[2,'他不但會說中文，＿＿會說日文。','而且',['所以','但是','因為'],'érqiě · dan juga (不但…而且… = bukan hanya… tapi juga…)','這家店很好吃，而且很便宜。','Zhè jiā diàn hěn hǎochī, érqiě hěn piányí.','Toko ini enak, dan juga murah.'],
+[2,'這件衣服＿＿那件貴一點。','比',['把','被','和'],'bǐ · dibanding (A 比 B + sifat)','哥哥比我高。','Gēge bǐ wǒ gāo.','Kakak lebih tinggi daripada aku.'],
+[2,'請你＿＿門關起來。','把',['比','被','跟'],'bǎ · pola 把: melakukan sesuatu pada objek','請把書給我。','Qǐng bǎ shū gěi wǒ.','Tolong berikan bukunya padaku.'],
+[2,'我的錢包＿＿小偷偷走了。','被',['把','比','對'],'bèi · pasif ("di-")','我的手機被朋友借走了。','Wǒ de shǒujī bèi péngyǒu jièzǒu le.','Ponselku dipinjam temanku.'],
+[2,'我＿＿吃飯了，你呢？','已經',['還是','應該','經常'],'yǐjīng · sudah (…了)','他已經下課了。','Tā yǐjīng xiàkè le.','Dia sudah selesai kelas.'],
+[2,'明天要早起，你＿＿早點睡覺。','應該',['已經','附近','特別'],'yīnggāi · seharusnya / sebaiknya','你應該多喝水。','Nǐ yīnggāi duō hē shuǐ.','Kamu sebaiknya banyak minum air.'],
+[2,'你想喝咖啡＿＿茶？','還是',['而且','所以','如果'],'háishi · atau (di pertanyaan pilihan)','你去還是我去？','Nǐ qù háishi wǒ qù?','Kamu yang pergi atau aku?'],
+[2,'我＿＿明年去台灣學中文。','打算',['附近','收據','出口'],'dǎsuàn · berencana','我打算明年去台北。','Wǒ dǎsuàn míngnián qù Táiběi.','Aku berencana ke Taipei tahun depan.'],
+[2,'明天我要去公司＿＿，希望可以得到這份工作。','面試',['考試','開會','請假'],'miànshì · wawancara kerja (考試 = ujian)','他明天有一個面試。','Tā míngtiān yǒu yí ge miànshì.','Besok dia ada wawancara.'],
+[2,'我今天不舒服，想向老闆＿＿。','請假',['面試','開會','上班'],'qǐngjià · izin tidak masuk','我明天想請假一天。','Wǒ míngtiān xiǎng qǐngjià yì tiān.','Besok aku mau izin satu hari.'],
+[2,'他每天都準時到，從來不＿＿。','遲到',['上課','準時','出口'],'chídào · terlambat (準時 = tepat waktu)','對不起，我遲到了。','Duìbuqǐ, wǒ chídào le.','Maaf, aku terlambat.'],
+[2,'不好意思，可以＿＿你幫我一個忙嗎？','麻煩',['附近','習慣','特別'],'máfan · merepotkan; 麻煩你 = tolong','麻煩你關門。','Máfan nǐ guānmén.','Tolong tutup pintu.'],
+[2,'請在表格上寫你的名字、電話和＿＿。','地址',['折扣','收據','藥'],'dìzhǐ · alamat (表格 = formulir)','請寫你的地址。','Qǐng xiě nǐ de dìzhǐ.','Tolong tulis alamatmu.'],
+[2,'「本店明天休息，後天早上九點開門。」\n這家店最快什麼時候可以買東西？','後天早上九點',['明天早上九點','明天下午','明天晚上'],'hòutiān zǎoshang jiǔ diǎn · lusa jam 9 pagi (休息 = libur, 開門 = buka)','我們後天開會。','Wǒmen hòutiān kāihuì.','Kita rapat lusa.'],
+[2,'牛肉麵 一碗　150元\n紅茶 兩杯　80元\n合計 230元　現金 300元　找錢 70元\n這位客人給了店員多少錢？','300元',['230元','70元','150元'],'sānbǎi yuán · 300 dolar NT (合計 = total, 找錢 = kembalian; 300 − 230 = 70)','一共兩百元，找你五十元。','Yígòng liǎngbǎi yuán, zhǎo nǐ wǔshí yuán.','Totalnya 200, kembaliannya 50.'],
+[2,'用中文寫：Karena hujan, jadi saya tidak pergi ke sekolah.','因為下雨，所以我不去學校。',['因為','所以','下雨','學校'],'Yīnwèi xiàyǔ, suǒyǐ wǒ bú qù xuéxiào.'],
+[2,'用中文寫：Meskipun hari ini sibuk, aku tetap pergi olahraga.','雖然今天很忙，但是我還是去運動了。',['雖然','但是','運動'],'Suīrán jīntiān hěn máng, dànshì wǒ háishi qù yùndòng le.'],
+[2,'用中文寫（sopan）：Permisi, apakah ini ada diskon? Saya mau minta struk.','請問，這個有折扣嗎？我想要一張收據。',['折扣|打折|便宜','收據|發票'],'Qǐngwèn, zhège yǒu zhékòu ma? Wǒ xiǎng yào yì zhāng shōujù.']
+];
+const D3=[
+[1,'外面在下雨，所以我帶了＿＿。','雨傘',['眼鏡','帽子','鞋子'],'yǔsǎn · payung','你有沒有帶雨傘？','Nǐ yǒu méiyǒu dài yǔsǎn?','Apakah kamu bawa payung?'],
+[1,'我想知道現在幾點，可以看＿＿。','手錶',['眼鏡','雨傘','地圖'],'shǒubiǎo · jam tangan','他的手錶很漂亮。','Tā de shǒubiǎo hěn piàoliang.','Jam tangannya cantik.'],
+[1,'我不知道路，需要看＿＿。','地圖',['手錶','眼鏡','收據'],'dìtú · peta','請給我一張地圖。','Qǐng gěi wǒ yì zhāng dìtú.','Tolong berikan aku sebuah peta.'],
+[1,'他每天早上都喝一杯＿＿。','咖啡',['茶','水','酒'],'kāfēi · kopi','我喜歡喝黑咖啡。','Wǒ xǐhuān hē hēi kāfēi.','Aku suka minum kopi hitam.'],
+[1,'爺爺是我爸爸的爸爸。「爺爺」是誰？','kakek dari pihak ayah',['nenek dari pihak ibu','paman','bibi'],'yéye · kakek (pihak ayah)','爺爺今年八十歲了。','Yéye jīnnián bāshí suì le.','Kakek sekarang berusia 80 tahun.'],
+[1,'打籃球的時候，我們需要用到什麼？','球',['書','傘','藥'],'qiú · bola','他很會打籃球。','Tā hěn huì dǎ lánqiú.','Dia jago main basket.'],
+[1,'冬天很冷，我需要穿＿＿。','外套',['裙子','涼鞋','泳衣'],'wàitào · jaket / mantel','你應該穿外套出門。','Nǐ yīnggāi chuān wàitào chūmén.','Kamu sebaiknya pakai jaket keluar rumah.'],
+[1,'「顏色」是什麼意思？','warna',['bentuk','ukuran','rasa'],'yánsè · warna','你最喜歡什麼顏色？','Nǐ zuì xǐhuān shénme yánsè?','Warna apa yang paling kamu suka?'],
+[1,'現在是四月（春天），下一個季節是＿＿。','夏天',['冬天','秋天','春天'],'xiàtiān · musim panas','夏天很熱，我喜歡游泳。','Xiàtiān hěn rè, wǒ xǐhuān yóuyǒng.','Musim panas panas sekali, aku suka berenang.'],
+[1,'我今天很＿＿，因為明天要考試。','緊張',['高興','可愛','便宜'],'jǐnzhāng · gugup / tegang','面試的時候，我很緊張。','Miànshì de shíhòu, wǒ hěn jǐnzhāng.','Saat wawancara, aku sangat gugup.'],
+[2,'這條路一直走，然後左轉，就會看到郵局。「左轉」是什麼意思？','belok kiri',['belok kanan','jalan lurus','putar balik'],'zuǒzhuǎn · belok kiri','到路口右轉，就是銀行。','Dào lùkǒu yòuzhuǎn, jiùshì yínháng.','Di persimpangan belok kanan, itu bank.'],
+[2,'他很聰明，＿＿很努力，所以成績很好。','而且',['但是','雖然','如果'],'érqiě · dan juga','他很聰明，而且很努力。','Tā hěn cōngmíng, érqiě hěn nǔlì.','Dia pintar, dan juga rajin.'],
+[2,'天氣＿＿冷了，你要多穿衣服。','越來越',['有時候','常常','很少'],'yuèláiyuè · semakin lama semakin','他的中文越來越好。','Tā de Zhōngwén yuèláiyuè hǎo.','Bahasa Mandarinnya semakin bagus.'],
+[2,'雖然很累，＿＿我還是把作業寫完了。','不過',['所以','如果','而且'],'búguò · namun / tapi','雖然很累，不過我還是完成了工作。','Suīrán hěn lèi, búguò wǒ háishi wánchéng le gōngzuò.','Meski lelah, tapi aku tetap menyelesaikan pekerjaan.'],
+[2,'「順便」是什麼意思？','sekalian (melakukan sesuatu sambil lalu)',['terpaksa','tiba-tiba','sengaja'],'shùnbiàn · sekalian','你去超市的時候，可以順便買牛奶嗎？','Nǐ qù chāoshì de shíhòu, kěyǐ shùnbiàn mǎi niúnǎi ma?','Saat kamu ke minimarket, bisa sekalian beli susu?'],
+[2,'這台電腦壞了，需要拿去＿＿。','修理',['影印','退貨','寄'],'xiūlǐ · memperbaiki','我的手機壞了，要拿去修理。','Wǒ de shǒujī huài le, yào ná qù xiūlǐ.','Ponselku rusak, harus diperbaiki.'],
+[2,'這件衣服我穿起來太緊，我想要＿＿。','退貨',['修理','轉車','面試'],'tuìhuò · mengembalikan barang','東西買錯了，可以退貨嗎？','Dōngxi mǎi cuò le, kěyǐ tuìhuò ma?','Kalau salah beli barang, bisa dikembalikan?'],
+[2,'老闆對員工很好，大家都很＿＿他。','尊敬',['影印','遲到','麻煩'],'zūnjìng · menghormati','學生應該尊敬老師。','Xuéshēng yīnggāi zūnjìng lǎoshī.','Murid seharusnya menghormati guru.'],
+[2,'用中文寫：Meskipun aku sudah minta maaf, dia masih marah.','雖然我已經道歉了，但是他還是很生氣。',['雖然','道歉','生氣'],'Suīrán wǒ yǐjīng dàoqiàn le, dànshì tā háishi hěn shēngqì.'],
+[2,'用中文寫：Kalau kamu sempat, sekalian bantu aku beli tiket.','如果你有空，順便幫我買票。',['如果','順便','買票|票'],'Rúguǒ nǐ yǒu kòng, shùnbiàn bāng wǒ mǎi piào.']
+];
+const LV={1:['Level I','A1 + kosakata yang sudah kamu kuasai',30],2:['Level II','A2–B1: belanja, transportasi, tata bahasa, kerja',30],3:['Level III','50 soal: campuran soal gabungan + soal baru (fresh) tiap sesi',50],W:['Kata Sulit','Semua soal yang pernah kamu jawab salah, lintas sesi',0]},T={1:'A1',2:'A2–B1'};
+const ALL=D.concat(D3);
+const $=s=>document.querySelector(s),app=$('#app'),sh=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+let L,i,R,K,F;
+const B=()=>{try{return JSON.parse(localStorage.getItem('tocfl-best')||'{}')}catch(e){return{}}};
+const SB=(k,v)=>{try{const b=B();if(!(b[k]>=v)){b[k]=v;localStorage.setItem('tocfl-best',JSON.stringify(b))}}catch(e){}};
+const WG=()=>{try{return JSON.parse(localStorage.getItem('tocfl-wrong')||'{}')}catch(e){return{}}};
+const WS=w=>{try{localStorage.setItem('tocfl-wrong',JSON.stringify(w))}catch(e){}};
+const wMark=(txt,ok)=>{const w=WG();if(ok)delete w[txt];else w[txt]=1;WS(w)};
+const det=q=>q.length==8?`<div class=dt><b class=ac>${q[4]}</b><div class=mu>Contoh kalimat lain</div><span class=zh>${q[5]}</span><br><i>${q[6]}</i><br>${q[7]}</div>`:`<div class=dt><div class=mu>Contoh jawaban</div><span class=zh>${q[2]}</span><br><i>${q[4]}</i></div>`;
+function home(){
+ const b=B(),wc=Object.keys(WG()).length;
+ app.innerHTML=`<div class=card><h1>TOCFL Quiz 繁體</h1><p class=mu>Aksara Tradisional · pilihan ganda + menulis. Tiap soal ada evaluasi: pinyin, arti Indonesia, dan contoh kalimat lain. Pilih level:</p>${[1,2,3].map(k=>`<button class=lv data-k=${k}><b>${LV[k][0]}</b> · ${LV[k][2]} soal<br><span class=mu>${LV[k][1]}</span>${b[k]!=null?`<br><span class=ac>Skor terbaik: ${b[k]}/${LV[k][2]}</span>`:''}</button>`).join('')}${wc?`<button class=lv id=lw><b>${LV.W[0]}</b> · ${wc} soal<br><span class=mu>${LV.W[1]}</span></button>`:''}<p class=mu>Soal menulis dicek lewat kata kunci saja, jadi bandingkan juga dengan contoh jawaban.</p></div>`;
+ document.querySelectorAll('.lv[data-k]').forEach(x=>x.onclick=()=>go(+x.dataset.k));
+ if(wc)$('#lw').onclick=playWrong;
+}
+function go(k,l){K=k;F=!l;L=l||(k==3?sh(sh(D).slice(0,30).concat(D3)):sh(D.filter(q=>q[0]==k)));i=0;R=[];show()}
+function playWrong(){
+ const w=WG(),list=ALL.filter(q=>w[q[1]]);
+ K='W';F=false;L=sh(list);i=0;R=[];show();
+}
+function show(){
+ if(i>=L.length)return end();
+ const q=L[i],mc=q.length==8;
+ app.innerHTML=`<div class=bar><i style="width:${Math.round(i/L.length*100)}%"></i></div><div class=meta><span>${LV[K][0]} · ${i+1} / ${L.length}</span><span>${R.filter(r=>r.ok).length} benar</span></div><div class=card><div class=tag>${T[q[0]]} · ${mc?'Pilihan ganda':'Menulis'}</div><p class=q>${q[1]}</p><div id=a></div><div id=f></div></div>`;
+ const a=$('#a');
+ if(mc){sh([q[2],...q[3]]).forEach(t=>{const b=document.createElement('button');b.className='o';b.textContent=t;b.onclick=()=>pick(b,t);a.append(b)})}
+ else{a.innerHTML='<textarea id=t placeholder="Tulis dengan aksara Tradisional…"></textarea><button class=b id=c>Cek jawaban</button>';$('#c').onclick=chk}
+}
+function pick(b,t){
+ const q=L[i],ok=t==q[2];
+ document.querySelectorAll('.o').forEach(x=>{x.disabled=true;if(x.textContent==q[2])x.classList.add('ok')});
+ if(!ok)b.classList.add('no');
+ fin(ok,ok?'✓ Benar':'✗ Jawaban: <b>'+q[2]+'</b>');
+}
+function chk(){
+ const q=L[i],t=$('#t').value.replace(/\s/g,''),g=q[3].map(x=>x.split('|').some(k=>t.includes(k))),ok=!!t&&g.every(Boolean);
+ $('#t').disabled=true;$('#c').remove();
+ fin(ok,(ok?'✓ Semua kata kunci ada.':'✗ Belum lengkap.')+' '+q[3].map((x,j)=>(g[j]?'✓ ':'✗ ')+x.replace(/\|/g,' / ')).join(' · '));
+}
+function fin(ok,h){
+ R.push({q:L[i],ok});
+ wMark(L[i][1],ok);
+ $('#f').innerHTML=`<div class="fb ${ok?'ok':'no'}">${h}${det(L[i])}</div><button class=b id=n>${i+1<L.length?'Lanjut →':'Lihat hasil'}</button>`;
+ $('#n').onclick=()=>{i++;show()};
+}
+function end(){
+ const t=R.filter(x=>x.ok).length,n=R.length,w=R.filter(x=>!x.ok).map(x=>x.q),c=l=>{const r=R.filter(x=>x.q[0]==l);return r.length?r.filter(x=>x.ok).length+'/'+r.length:'–'};
+ if(F)SB(K,t);
+ const tx=`TOCFL Quiz ${LV[K][0]}: ${t}/${n}`;
+ app.innerHTML=`<div class=card><h2>${t} / ${n}</h2><p>A1: ${c(1)} · A2–B1: ${c(2)}</p>${w.length?'<b>Perlu diulang (tap untuk detail)</b>'+w.map(q=>`<details><summary>${q[1].split('\n').pop()} → <b>${q[2]}</b></summary>${det(q)}</details>`).join(''):'<p>Sempurna. Semua soal ini keluar dari daftar Kata Sulit.</p>'}<button class=b id=a1>${K=='W'?'Ulangi kata sulit':'Ulangi level'}</button>${w.length&&K!='W'?'<button class="b g" id=a2>Latih yang salah</button>':''}<button class="b g" id=hm>Pilih level</button><button class="b g" id=cp>Salin skor</button></div>`;
+ $('#a1').onclick=()=>K=='W'?playWrong():go(K);
+ if(w.length&&K!='W')$('#a2').onclick=()=>go(K,sh(w));
+ $(
